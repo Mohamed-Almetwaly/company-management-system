@@ -1,0 +1,32 @@
+/* ضبط حجم وأبعاد الـ Sidebar */
+.sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    min-vh: 100vh;
+    transition: all 0.3s;
+}
+
+/* تحسين شكل الروابط عند التمرير */
+.sidebar .nav-link {
+    border-radius: 8px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .nav-link:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+/* تأثيرات الكروت */
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.08)!important;
+}
