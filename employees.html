@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الموظفين | HR Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* منع أي تسريب أفقي في الصفحة نهائياً */
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
+        .no-arrow::after {
+            display: none !important;
+        }
+        .dropdown-item {
+            transition: all 0.2s ease-in-out;
+        }
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <div class="d-flex" style="max-width: 100vw; overflow-x: hidden;">
+        
+        <div class="bg-dark text-white p-3 sidebar" id="sidebar" style="width: 250px; min-width: 250px; min-height: 100vh; flex-shrink: 0;">
+            <h4 class="text-center mb-4 py-2 border-bottom" id="sidebarCompanyName"><i class="bi bi-person-workspace me-2"></i>إدارة الشركة</h4>
+            <ul class="nav nav-pills flex-column mb-auto px-0">
+                <li class="nav-item mb-2"><a href="index.html" class="nav-link text-white"><i class="bi bi-speedometer2 ms-2"></i> لوحة التحكم</a></li>
+                <li class="nav-item mb-2"><a href="employees.html" class="nav-link text-white active"><i class="bi bi-people ms-2"></i> الموظفين</a></li>
+                <li class="nav-item mb-2"><a href="attendance.html" class="nav-link text-white"><i class="bi bi-calendar-check ms-2"></i> الحضور والغياب</a></li>
+                <li class="nav-item mb-2"><a href="salaries.html" class="nav-link text-white"><i class="bi bi-cash-coin ms-2"></i> الرواتب والمالية</a></li>
+                <li class="nav-item mb-2"><a href="settings.html" class="nav-link text-white"><i class="bi bi-gear ms-2"></i> الإعدادات</a></li>
+            </ul>
+        </div>
+
+        <div class="flex-grow-1 min-vh-100 d-flex flex-column" style="overflow-x: hidden;">
+            
+            <nav class="navbar navbar-expand-lg navbar-white bg-white shadow-sm px-4 py-3">
+                <div class="container-fluid d-flex justify-content-between align-items-center">
+                    <span class="navbar-brand mb-0 h1 text-secondary fw-bold">إدارة الموظفين</span>
+                    
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown me-3">
+                            <div class="position-relative" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                                <i class="bi bi-bell fs-5 text-secondary"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">3</span>
+                            </div>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 p-2 text-start" style="min-width: 290px; border-radius: 12px; z-index: 1050;">
+                                <li><h6 class="dropdown-header text-dark fw-bold border-bottom pb-2 mb-2"><i class="bi bi-bell ms-1 text-primary"></i> الإشعارات الأخيرة</h6></li>
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 mb-1" href="salaries.html">
+                                        <div class="fw-bold small text-dark">تحديث الرواتب لشهر الحالي</div>
+                                        <small class="text-muted">تم اعتماد المسير المالي بنجاح.</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 mb-1" href="employees.html">
+                                        <div class="fw-bold small text-dark">موظف جديد (أحمد علي)</div>
+                                        <small class="text-muted">يحتاج لتأكيد المسمى الوظيفي.</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2" href="attendance.html">
+                                        <div class="fw-bold small text-dark">تنبيـه حضور وانصراف</div>
+                                        <small class="text-muted">تم تسجيل غياب 1 موظف تلقائياً اليوم.</small>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="dropdown">
+                            <div id="navAdminInitials" class="bg-light text-primary rounded-circle d-flex align-items-center justify-content-center border shadow-sm fw-bold dropdown-toggle no-arrow" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; cursor: pointer;">
+                                ..
+                            </div>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 p-2 text-start" style="min-width: 200px; border-radius: 12px; z-index: 1050;">
+                                <li>
+                                    <div class="px-3 py-2">
+                                        <p class="mb-0 small text-muted">مرحباً بك</p>
+                                        <h6 class="mb-0 fw-bold text-dark" id="dropdownAdminName">جاري التحميل...</h6>
+                                    </div>
+                                </li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li><a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2" href="settings.html"><i class="bi bi-person-gear text-secondary fs-5"></i><span>إعدادات الحساب</span></a></li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li><a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-box-arrow-right fs-5"></i><span>تسجيل الخروج</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0 text-dark">قائمة موظفي الشركة</h5>
+                    <button class="btn btn-primary d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                        <i class="bi bi-person-plus-fill"></i> إضافة موظف جديد
+                    </button>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-md-4">
+                        <div class="card border-0 shadow-sm p-3 bg-white">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-muted small mb-1 fw-semibold">إجمالي الكادر الوظيفي</h6>
+                                    <h3 class="fw-bold mb-0 text-dark" id="countTotal">0</h3>
+                                </div>
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <i class="bi bi-people-fill fs-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="card border-0 shadow-sm p-3 bg-white">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-muted small mb-1 fw-semibold">الموظفين النشطين</h6>
+                                    <h3 class="fw-bold mb-0 text-success" id="countActive">0</h3>
+                                </div>
+                                <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <i class="bi bi-person-check-fill fs-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="card border-0 shadow-sm p-3 bg-white">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-muted small mb-1 fw-semibold">إجازات وحالات أخرى</h6>
+                                    <h3 class="fw-bold mb-0 text-warning" id="countAway">0</h3>
+                                </div>
+                                <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <i class="bi bi-person-dash-fill fs-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card border-0 shadow-sm p-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 text-center">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" class="text-start px-4">الموظف</th>
+                                    <th scope="col">القسم</th>
+                                    <th scope="col">المسمى الوظيفي</th>
+                                    <th scope="col">تاريخ التعيين</th>
+                                    <th scope="col">الحالة</th>
+                                    <th scope="col">الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold" id="addEmployeeModalLabel"><i class="bi bi-person-plus me-2"></i>إضافة موظف جديد لمؤسستك</h5>
+                    <button type="button" class="btn-close btn-close-white ms-0 me-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="addEmployeeForm" onsubmit="return false;">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">اسم الموظف</label>
+                            <input type="text" class="form-control" id="empName" required placeholder="أدخل الاسم بالكامل">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">البريد الإلكتروني</label>
+                            <input type="email" class="form-control" id="empEmail" required placeholder="name@company.com">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">القسم</label>
+                            <select class="form-select" id="empDept" required>
+                                <option value="" selected disabled>اختر القسم...</option>
+                                <option value="تكنولوجيا المعلومات">تكنولوجيا المعلومات</option>
+                                <option value="الموارد البشرية">الموارد البشرية</option>
+                                <option value="الحسابات والمبيعات">الحسابات والمبيعات</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">المسمى الوظيفي</label>
+                            <input type="text" class="form-control" id="empRole" required placeholder="مثال: Frontend Developer">
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">إلغاء</button>
+                            <button type="button" id="saveEmployeeBtn" class="btn btn-primary px-4">حفظ الموظف</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-secondary text-white">
+                    <h5 class="modal-title fw-bold" id="editEmployeeModalLabel"><i class="bi bi-pencil-square me-2"></i>تعديل بيانات الموظف</h5>
+                    <button type="button" class="btn-close btn-close-white ms-0 me-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="editEmployeeForm" onsubmit="return false;">
+                        <input type="hidden" id="editOldEmail">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">اسم الموظف</label>
+                            <input type="text" class="form-control" id="editEmpName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">القسم</label>
+                            <select class="form-select" id="editEmpDept" required>
+                                <option value="تكنولوجيا المعلومات">تكنولوجيا المعلومات</option>
+                                <option value="الموارد البشرية">الموارد البشرية</option>
+                                <option value="الحسابات والمبيعات">الحسابات والمبيعات</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">المسمى الوظيفي</label>
+                            <input type="text" class="form-control" id="editEmpRole" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">حالة الموظف</label>
+                            <select class="form-select" id="editEmpStatus" required>
+                                <option value="نشط">نشط</option>
+                                <option value="في إجازة">في إجازة</option>
+                                <option value="غير نشط">غير نشط</option>
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">إلغاء</button>
+                            <button type="button" id="updateEmployeeBtn" class="btn btn-secondary px-4">تحديث البيانات</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        
+        // --- [جزء الإعدادات والمزامنة المطور للـ Navbar] ---
+        const globalSettings = JSON.parse(localStorage.getItem("hr_dashboard_settings")) || {
+            adminName: "محمد المتولي",
+            companyName: "شركة المتولي للبرمجيات",
+            currency: "ج.م"
+        };
+
+        if (document.getElementById("sidebarCompanyName") && globalSettings.companyName) {
+            document.getElementById("sidebarCompanyName").innerHTML = `<i class="bi bi-person-workspace me-2"></i>${globalSettings.companyName}`;
+        }
+        if (document.getElementById("dropdownAdminName") && globalSettings.adminName) {
+            document.getElementById("dropdownAdminName").textContent = globalSettings.adminName;
+        }
+        if (document.getElementById("navAdminInitials") && globalSettings.adminName) {
+            const nameParts = globalSettings.adminName.trim().split(" ");
+            const initials = nameParts.map(p => p[0]).slice(0, 2).join("");
+            document.getElementById("navAdminInitials").textContent = initials.toUpperCase();
+        }
+        // ----------------------------------------------------
+
+        const saveBtn = document.getElementById("saveEmployeeBtn");
+        const updateBtn = document.getElementById("updateEmployeeBtn");
+        const tableBody = document.querySelector("table tbody");
+        const addEmployeeForm = document.getElementById("addEmployeeForm");
+        const editEmployeeForm = document.getElementById("editEmployeeForm");
+        
+        let activeRowForEdit = null;
+
+        const defaultEmployees = [
+            { id: "1", name: "Mohamed Almetwaly", email: "Almetwaly088@gmail.com", dept: "تكنولوجيا المعلومات", role: "Frontend Developer", date: "اليوم", status: "نشط" },
+            { id: "2", name: "أحمد علي", email: "ahmed@company.com", dept: "تكنولوجيا المعلومات", role: "Senior Web Developer", date: "12 يناير 2024", status: "نشط" },
+            { id: "3", name: "سارة محمد", email: "sara@company.com", dept: "الموارد البشرية", role: "HR Specialist", date: "05 مارس 2023", status: "في إجازة" },
+            { id: "4", name: "محمود حسن", email: "mahmoud@company.com", dept: "الحسابات والمبيعات", role: "Accountant", date: "18 نوفمبر 2022", status: "غير نشط" }
+        ];
+
+        if (!localStorage.getItem("employees")) {
+            localStorage.setItem("employees", JSON.stringify(defaultEmployees));
+        }
+
+        // دالة تحميل الموظفين وتحديث الكروت العلوية تلقائياً
+        function loadEmployees() {
+            tableBody.innerHTML = "";
+            const storedEmployees = JSON.parse(localStorage.getItem("employees")) || [];
+            
+            let total = storedEmployees.length;
+            let active = 0;
+            let away = 0;
+
+            storedEmployees.forEach(emp => {
+                if (emp.status === "نشط") active++;
+                else away++; // يشمل "في إجازة" و "غير نشط"
+
+                renderNewRow(emp.id, emp.name, emp.email, emp.dept, emp.role, emp.date, emp.status);
+            });
+
+            // تحديث الكروت العلوية بالأرقام الصحيحة ديناميكياً
+            document.getElementById("countTotal").textContent = total;
+            document.getElementById("countActive").textContent = active;
+            document.getElementById("countAway").textContent = away;
+        }
+
+        function renderNewRow(id, name, email, dept, role, date = "اليوم", status = "نشط") {
+            const initials = name.split(" ").map(word => word[0]).slice(0, 2).join("");
+            const newRow = document.createElement("tr");
+            newRow.setAttribute("data-id", id);
+            newRow.setAttribute("data-email", email); 
+
+            let statusBadge = "";
+            let avatarBg = "bg-primary text-white";
+            
+            if (status === "نشط") {
+                statusBadge = `<span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">نشط</span>`;
+            } else if (status === "في إجازة") {
+                statusBadge = `<span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-2">في إجازة</span>`;
+                avatarBg = "bg-warning text-dark";
+            } else {
+                statusBadge = `<span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">غير نشط</span>`;
+                avatarBg = "bg-secondary text-white";
+            }
+            
+            newRow.innerHTML = `
+                <td>
+                    <div class="d-flex align-items-center justify-content-start gap-3 px-3">
+                        <div class="${avatarBg} rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-weight: bold;">
+                            ${initials || 'مو'}
+                        </div>
+                        <div class="text-start">
+                            <h6 class="mb-0 fw-bold class-emp-name">${name}</h6>
+                            <small class="text-muted class-emp-email">${email}</small>
+                        </div>
+                    </div>
+                </td>
+                <td class="class-emp-dept">${dept}</td>
+                <td class="class-emp-role">${role}</td>
+                <td>${date}</td>
+                <td>${statusBadge}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-secondary me-1 edit-btn" title="تعديل"><i class="bi bi-pencil-square pointer-events-none"></i></button>
+                    <button class="btn btn-sm btn-outline-danger delete-btn" title="حذف"><i class="bi bi-trash pointer-events-none"></i></button>
+                </td>
+            `;
+            tableBody.insertBefore(newRow, tableBody.firstChild);
+        }
+
+        loadEmployees();
+
+        if (saveBtn && tableBody) {
+            saveBtn.addEventListener("click", () => {
+                const name = document.getElementById("empName").value.trim();
+                const email = document.getElementById("empEmail").value.trim();
+                const dept = document.getElementById("empDept").value;
+                const role = document.getElementById("empRole").value.trim();
+
+                if (!name || !email || !dept || !role) {
+                    alert("يرجى ملء جميع الحقول أولاً واختيار القسم المناسب!");
+                    return;
+                }
+
+                const empId = Date.now().toString();
+                const storedEmployees = JSON.parse(localStorage.getItem("employees")) || [];
+                
+                storedEmployees.push({ id: empId, name, email, dept, role, date: "اليوم", status: "نشط" });
+                localStorage.setItem("employees", JSON.stringify(storedEmployees));
+
+                loadEmployees();
+                addEmployeeForm.reset();
+
+                const modalElement = document.getElementById("addEmployeeModal");
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.style.overflow = 'auto';
+            });
+        }
+
+        if (tableBody) {
+            tableBody.addEventListener("click", (e) => {
+                const targetBtn = e.target.closest("button");
+                if (!targetBtn) return;
+
+                const currentRow = targetBtn.closest("tr");
+                const empId = currentRow.getAttribute("data-id");
+
+                if (targetBtn.classList.contains("delete-btn")) {
+                    if (confirm("هل أنت متأكد من رغبتك في حذف هذا الموظف نهائياً من المنظومة؟")) {
+                        currentRow.remove();
+                        let storedEmployees = JSON.parse(localStorage.getItem("employees")) || [];
+                        storedEmployees = storedEmployees.filter(emp => emp.id !== empId);
+                        localStorage.setItem("employees", JSON.stringify(storedEmployees));
+                        loadEmployees(); // لإعادة حساب الأرقام في الكروت العلوية فوراً
+                    }
+                }
+
+                if (targetBtn.classList.contains("edit-btn")) {
+                    activeRowForEdit = currentRow;
+                    const currentName = currentRow.querySelector(".class-emp-name")?.textContent.trim();
+                    const currentDept = currentRow.querySelector(".class-emp-dept")?.textContent.trim();
+                    const currentRole = currentRow.querySelector(".class-emp-role")?.textContent.trim();
+                    const empEmail = currentRow.getAttribute("data-email");
+
+                    // جلب الحالة القديمة من الـ localStorage بناءً على الـ ID
+                    const storedEmployees = JSON.parse(localStorage.getItem("employees")) || [];
+                    const currentEmpData = storedEmployees.find(emp => emp.id === empId);
+
+                    document.getElementById("editOldEmail").value = empEmail;
+                    document.getElementById("editEmpName").value = currentName;
+                    document.getElementById("editEmpDept").value = currentDept;
+                    document.getElementById("editEmpRole").value = currentRole;
+                    if (currentEmpData) {
+                        document.getElementById("editEmpStatus").value = currentEmpData.status;
+                    }
+
+                    const editModal = new bootstrap.Modal(document.getElementById("editEmployeeModal"));
+                    editModal.show();
+                }
+            });
+        }
+
+        if (updateBtn) {
+            updateBtn.addEventListener("click", () => {
+                const newName = document.getElementById("editEmpName").value.trim();
+                const newDept = document.getElementById("editEmpDept").value;
+                const newRole = document.getElementById("editEmpRole").value.trim();
+                const newStatus = document.getElementById("editEmpStatus").value;
+
+                if (!newName || !newRole) {
+                    alert("يرجى ملء كافة الخانات المطلوبة!");
+                    return;
+                }
+
+                if (activeRowForEdit) {
+                    const empId = activeRowForEdit.getAttribute("data-id");
+                    const storedEmployees = JSON.parse(localStorage.getItem("employees")) || [];
+                    const empIndex = storedEmployees.findIndex(emp => emp.id === empId);
+                    
+                    if (empIndex !== -1) {
+                        storedEmployees[empIndex].name = newName;
+                        storedEmployees[empIndex].dept = newDept;
+                        storedEmployees[empIndex].role = newRole;
+                        storedEmployees[empIndex].status = newStatus; // حفظ الحالة الجديدة المعدلة
+                        localStorage.setItem("employees", JSON.stringify(storedEmployees));
+                    }
+
+                    loadEmployees();
+
+                    const editModalElement = document.getElementById("editEmployeeModal");
+                    const modalInstance = bootstrap.Modal.getInstance(editModalElement);
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    }
+                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>

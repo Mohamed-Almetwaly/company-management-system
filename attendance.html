@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحضور والغياب | HR Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        @media (max-width: 768px) {
+            #sidebar {
+                position: fixed;
+                top: 0;
+                right: -250px; /* إخفاء القائمة خارج الشاشة من جهة اليمين */
+                height: 100vh;
+                z-index: 1050;
+                transition: right 0.3s ease-in-out;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+            }
+            #sidebar.active {
+                right: 0; /* إظهار القائمة عند الضغط على الزر */
+            }
+        }
+        /* إضافات بسيطة لجمالية القوائم المنسدلة */
+        .dropdown-menu {
+            border: none;
+            border-radius: 8px;
+        }
+        .dropdown-item i {
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="d-flex">
+        <div class="bg-dark text-white p-3 sidebar" id="sidebar" style="min-width: 250px;">
+            <h4 class="text-center mb-4 py-2 border-bottom"><i class="bi bi-person-workspace me-2"></i>إدارة الشركة</h4>
+            <ul class="nav nav-pills flex-column mb-auto px-0">
+                <li class="nav-item mb-2">
+                    <a href="index.html" class="nav-link text-white">
+                        <i class="bi bi-speedometer2 ms-2"></i> لوحة التحكم
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="employees.html" class="nav-link text-white">
+                        <i class="bi bi-people ms-2"></i> الموظفين
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="attendance.html" class="nav-link text-white active">
+                        <i class="bi bi-calendar-check ms-2"></i> الحضور والغياب
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="salaries.html" class="nav-link text-white">
+                        <i class="bi bi-cash-coin ms-2"></i> الرواتب والمالية
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="settings.html" class="nav-link text-white">
+                        <i class="bi bi-gear ms-2"></i> الإعدادات
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="w-100 bg-light min-vh-100">
+            <nav class="navbar navbar-expand-lg navbar-white bg-white shadow-sm px-4 py-3">
+                <div class="container-fluid d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-light d-md-none ms-2" id="sidebarToggle">
+                            <i class="bi bi-list fs-4"></i>
+                        </button>
+                        <span class="navbar-brand mb-0 h1 text-secondary">إدارة الحضور والغياب</span>
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                        
+                        <div class="dropdown me-3">
+                            <a href="#" class="text-secondary position-relative d-inline-block" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-bell fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">3</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="notificationsDropdown" style="width: 290px;">
+                                <li><h6 class="dropdown-header text-dark fw-bold border-bottom pb-2">الإشعارات والتنبيهات</h6></li>
+                                <li>
+                                    <a class="dropdown-item py-2 text-wrap" href="#">
+                                        <div class="small text-dark fw-semibold"><i class="bi bi-check-circle text-success ms-2"></i>تم تسجيل حضور أحمد علي</div>
+                                        <small class="text-muted ps-4">منذ 5 دقائق</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item py-2 text-wrap" href="#">
+                                        <div class="small text-dark fw-semibold"><i class="bi bi-clock-history text-warning ms-2"></i>تأخر محمود حسن عن الموعد</div>
+                                        <small class="text-muted ps-4">منذ ساعة</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item py-2 text-wrap" href="#">
+                                        <div class="small text-dark fw-semibold"><i class="bi bi-calendar-plus text-primary ms-2"></i>طلب إجازة جديد من سارة محمد</div>
+                                        <small class="text-muted ps-4">منذ ساعتين</small>
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li><a class="dropdown-item text-center text-primary small fw-semibold" href="#">عرض كافة الإشعارات</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-decoration-none" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="bg-light text-secondary rounded-circle d-flex align-items-center justify-content-center border shadow-sm cursor-pointer" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-person fs-4"></i>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="profileDropdown" style="min-width: 180px;">
+                                <li>
+                                    <div class="dropdown-header text-start py-2">
+                                        <h6 class="mb-0 text-dark fw-bold">محمد متولي</h6>
+                                        <small class="text-muted">مسؤول النظام</small>
+                                    </div>
+                                </li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li><a class="dropdown-item" href="settings.html"><i class="bi bi-person-gear ms-2 text-secondary"></i>الملف الشخصي</a></li>
+                                <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear ms-2 text-secondary"></i>إعدادات الحساب</a></li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right ms-2"></i>تسجيل الخروج</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm p-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-muted mb-1 small">حاضرون اليوم</h6>
+                                    <h4 class="fw-bold mb-0 text-success" id="stat-present">0</h4>
+                                </div>
+                                <div class="bg-success bg-opacity-10 p-2 rounded text-success"><i class="bi bi-person-check fs-4"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm p-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-muted mb-1 small">المتأخرون</h6>
+                                    <h4 class="fw-bold mb-0 text-warning" id="stat-late">0</h4>
+                                </div>
+                                <div class="bg-warning bg-opacity-10 p-2 rounded text-warning"><i class="bi bi-clock-history fs-4"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm p-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-muted mb-1 small">إجمالي الغياب</h6>
+                                    <h4 class="fw-bold mb-0 text-danger" id="stat-absent">0</h4>
+                                </div>
+                                <div class="bg-danger bg-opacity-10 p-2 rounded text-danger"><i class="bi bi-person-x fs-4"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm p-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-muted mb-1 small">طلبات الإجازة</h6>
+                                    <h4 class="fw-bold mb-0 text-primary" id="stat-leaves">0</h4>
+                                </div>
+                                <div class="bg-primary bg-opacity-10 p-2 rounded text-primary"><i class="bi bi-calendar-range fs-4"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm p-4 mb-4">
+                    <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-plus-circle me-1 text-primary"></i> تسجيل طلب أو حركة جديدة</h5>
+                    <form id="attendanceForm" onsubmit="return false;">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label for="attName" class="form-label small fw-semibold text-secondary">اسم الموظف</label>
+                                <select class="form-select" id="attName" required>
+                                    <option value="" selected disabled>اختر الموظف...</option>
+                                    <option value="محمد متولي">محمد متولي</option>
+                                    <option value="أحمد علي">أحمد علي</option>
+                                    <option value="سارة محمد">سارة محمد</option>
+                                    <option value="محمود حسن">محمود حسن</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="attStatus" class="form-label small fw-semibold text-secondary">الحالة</label>
+                                <select class="form-select" id="attStatus" required>
+                                    <option value="منتظم" selected>منتظم (حضور)</option>
+                                    <option value="متأخر">متأخر</option>
+                                    <option value="غائب">غائب</option>
+                                    <option value="إجازة">إجازة رسمية</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="attTime" class="form-label small fw-semibold text-secondary">وقت الحضور</label>
+                                <input type="time" class="form-control" id="attTime" value="09:00">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="attDate" class="form-label small fw-semibold text-secondary">التاريخ</label>
+                                <input type="date" class="form-control" id="attDate" value="2026-06-02">
+                            </div>
+                            <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+                                <button type="reset" class="btn btn-light">تفريغ الخانات</button>
+                                <button type="button" id="saveAttendanceBtn" class="btn btn-primary px-4">إضافة الحركة</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card border-0 shadow-sm p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3 px-2">
+                        <h5 class="fw-bold mb-0 text-dark">سجل الحركات اليومي</h5>
+                        <span class="badge bg-secondary py-2 px-3">اليوم</span>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 text-center" id="attendanceTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">الموظف</th>
+                                    <th scope="col">التاريخ</th>
+                                    <th scope="col">وقت تسجيل الحضور</th>
+                                    <th scope="col">الحالة</th>
+                                    <th scope="col">الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"> <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-start gap-3 px-3">
+                                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-weight: bold;">أع</div>
+                                            <div class="text-start">
+                                                <h6 class="mb-0 fw-bold">أحمد علي</h6>
+                                                <small class="text-muted">تكنولوجيا المعلومات</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>2026-06-02</td>
+                                    <td>08:45 AM</td>
+                                    <td><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">منتظم</span></td>
+                                    <td><button class="btn btn-sm btn-outline-danger row-delete-btn"><i class="bi bi-trash"></i></button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-start gap-3 px-3">
+                                            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-weight: bold;">مح</div>
+                                            <div class="text-start">
+                                                <h6 class="mb-0 fw-bold">محمود حسن</h6>
+                                                <small class="text-muted">الحسابات والمبيعات</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>2026-06-02</td>
+                                    <td>09:15 AM</td>
+                                    <td><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">منتظم</span></td>
+                                    <td><button class="btn btn-sm btn-outline-danger row-delete-btn"><i class="bi bi-trash"></i></button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-start gap-3 px-3">
+                                            <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-weight: bold;">سم</div>
+                                            <div class="text-start">
+                                                <h6 class="mb-0 fw-bold">سارة محمد</h6>
+                                                <small class="text-muted">الموارد البشرية</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>2026-06-02</td>
+                                    <td>--:--</td>
+                                    <td><span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">إجازة</span></td>
+                                    <td><button class="btn btn-sm btn-outline-danger row-delete-btn"><i class="bi bi-trash"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const saveBtn = document.getElementById("saveAttendanceBtn");
+            const resetBtn = document.querySelector("button[type='reset']");
+            const tableBody = document.getElementById("tableBody"); // تعديل السلكتور ليعتمد على الـ ID مباشرة
+            const statusSelect = document.getElementById("attStatus");
+            const timeInput = document.getElementById("attTime");
+
+            // منطق فتح وإغلاق السايد بار عبر الزر
+            const sidebarToggle = document.getElementById("sidebarToggle");
+            const sidebar = document.getElementById("sidebar");
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener("click", (e) => {
+                    e.stopPropagation(); 
+                    sidebar.classList.toggle("active");
+                });
+            }
+
+            // إغلاق السايد بار تلقائياً عند الضغط خارجها في الموبايل
+            document.addEventListener("click", (e) => {
+                if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains("active")) {
+                    if (!sidebar.contains(e.target) && e.target !== sidebarToggle) {
+                        sidebar.classList.remove("active");
+                    }
+                }
+            });
+
+            // دالة تحديث الإحصائيات تلقائيًا
+            function updateStats() {
+                const rows = tableBody.querySelectorAll("tr");
+                let present = 0, late = 0, absent = 0, leaves = 0;
+
+                rows.forEach(row => {
+                    const badge = row.querySelector(".badge");
+                    if (badge) {
+                        const text = badge.textContent.trim();
+                        if (text === "منتظم") present++;
+                        if (text === "متأخر") late++;
+                        if (text === "غائب") absent++;
+                        if (text === "إجازة") leaves++;
+                    }
+                });
+
+                if(document.getElementById("stat-present")) document.getElementById("stat-present").textContent = present;
+                if(document.getElementById("stat-late")) document.getElementById("stat-late").textContent = late;
+                if(document.getElementById("stat-absent")) document.getElementById("stat-absent").textContent = absent;
+                if(document.getElementById("stat-leaves")) document.getElementById("stat-leaves").textContent = leaves;
+            }
+
+            // تعطيل حقل الوقت تلقائيًا إذا كانت الحالة "غائب" أو "إجازة"
+            if (statusSelect && timeInput) {
+                statusSelect.addEventListener("change", () => {
+                    if (statusSelect.value === "غائب" || statusSelect.value === "إجازة") {
+                        timeInput.value = "";
+                        timeInput.disabled = true;
+                    } else {
+                        timeInput.disabled = false;
+                        timeInput.value = "09:00";
+                    }
+                });
+            }
+            // 1. إضافة حركة جديدة للجدول
+            if (saveBtn && tableBody) {
+                saveBtn.addEventListener("click", () => {
+                    const nameSelect = document.getElementById("attName");
+                    const dateInput = document.getElementById("attDate");
+                    const name = nameSelect.value;
+                    const status = statusSelect.value;
+                    let time = timeInput.value;
+                    const date = dateInput.value;
+
+                    if (!name || !status || !date) {
+                        alert("من فضلك اختر اسم الموظف وحدد كافة البيانات المطلوبة!");
+                        return;
+                    }
+                    let displayTime = "--:--";
+                    if (time && status !== "غائب" && status !== "إجازة") {
+                        const [hours, minutes] = time.split(':');
+                        const hrs = parseInt(hours);
+                        const ampm = hrs >= 12 ? 'PM' : 'AM';
+                        const formattedHours = hrs % 12 || 12;
+                        displayTime = `${String(formattedHours).padStart(2, '0')}:${minutes} ${ampm}`;
+                    }
+
+                    let badgeClass = "bg-success bg-opacity-10 text-success";
+                    if (status === "متأخر") badgeClass = "bg-warning bg-opacity-10 text-warning";
+                    if (status === "غائب") badgeClass = "bg-danger bg-opacity-10 text-danger";
+                    if (status === "إجازة") badgeClass = "bg-primary bg-opacity-10 text-primary";
+
+                    const initials = name.split(" ").map(w => w[0]).slice(0, 2).join("");
+
+                    const newRow = document.createElement("tr");
+                    newRow.innerHTML = `
+                        <td>
+                            <div class="d-flex align-items-center justify-content-start gap-3 px-3">
+                                <div class="bg-dark text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-weight: bold;">${initials}</div>
+                                <div class="text-start">
+                                    <h6 class="mb-0 fw-bold">${name}</h6>
+                                    <small class="text-muted">موظف مسجل</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${date}</td>
+                        <td>${displayTime}</td>
+                        <td><span class="badge ${badgeClass} rounded-pill px-3 py-2">${status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger row-delete-btn" title="حذف">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    `;
+
+                    tableBody.insertBefore(newRow, tableBody.firstChild);
+                    
+                    nameSelect.selectedIndex = 0;
+                    statusSelect.selectedIndex = 0;
+                    timeInput.disabled = false;
+                    timeInput.value = "09:00";
+                    
+                    updateStats();
+                });
+            }
+
+            // 2. حذف السطور
+            if (tableBody) {
+                tableBody.addEventListener("click", (e) => {
+                    const deleteBtn = e.target.closest(".row-delete-btn");
+                    if (deleteBtn) {
+                        if (confirm("هل تريد حذف سجل هذه الحركة؟")) {
+                            deleteBtn.closest("tr").remove();
+                            updateStats();
+                        }
+                    }
+                });
+            }
+
+            // 3. تفريغ الخانات عند الضغط على زر التصفير
+            if (resetBtn) {
+                resetBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    document.getElementById("attName").selectedIndex = 0;
+                    statusSelect.selectedIndex = 0;
+                    timeInput.disabled = false;
+                    timeInput.value = "09:00";
+                    document.getElementById("attDate").value = "2026-06-02";
+                });
+            }
+
+            updateStats();
+        });
+    </script>
+</body>
+</html>

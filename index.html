@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الرئيسية | HR Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif !important;
+        }
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
+        .no-arrow::after {
+            display: none !important;
+        }
+        .dropdown-item {
+            transition: all 0.2s ease-in-out;
+        }
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+        .card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.08)!important;
+        }
+        .pulse-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #198754;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.7);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(25, 135, 84, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="d-flex" style="max-width: 100vw; overflow-x: hidden;">
+        <div class="bg-dark text-white p-3 sidebar" style="width: 250px; min-width: 250px; min-height: 100vh; flex-shrink: 0;">
+            <h4 class="text-center mb-4 py-2 border-bottom" id="sidebarCompanyName"><i class="bi bi-person-workspace me-2"></i>شركة المتولي للبرمجيات</h4>
+            <ul class="nav nav-pills flex-column mb-auto px-0">
+                <li class="nav-item mb-2"><a href="index.html" class="nav-link text-white active"><i class="bi bi-speedometer2 ms-2"></i> لوحة التحكم</a></li>
+                <li class="nav-item mb-2"><a href="employees.html" class="nav-link text-white"><i class="bi bi-people ms-2"></i> الموظفين</a></li>
+                <li class="nav-item mb-2"><a href="attendance.html" class="nav-link text-white"><i class="bi bi-calendar-check ms-2"></i> الحضور والغياب</a></li>
+                <li class="nav-item mb-2"><a href="salaries.html" class="nav-link text-white"><i class="bi bi-cash-coin ms-2"></i> الرواتب والمالية</a></li>
+                <li class="nav-item mb-2"><a href="settings.html" class="nav-link text-white"><i class="bi bi-gear ms-2"></i> الإعدادات</a></li>
+            </ul>
+        </div>
+        <div class="flex-grow-1 min-vh-100 d-flex flex-column" style="overflow-x: hidden;">            
+            <nav class="navbar navbar-expand-lg navbar-white bg-white shadow-sm px-4 py-3">
+                <div class="container-fluid d-flex justify-content-between align-items-center px-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="navbar-brand mb-0 h1 text-secondary fw-bold">لوحة التحكم الإحصائية</span>
+                        <button class="btn btn-primary btn-sm d-flex align-items-center gap-2 rounded-2 px-3 py-2 border-0" data-bs-toggle="modal" data-bs-target="#addEmployeeModal" style="font-size: 0.85rem; font-weight: 600;">
+                            <i class="bi bi-plus-circle"></i>
+                            <span>إضافة موظف سريع</span>
+                        </button>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        
+                        <div class="dropdown me-3">
+                            <div class="position-relative" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                                <i class="bi bi-bell fs-5 text-secondary"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">3</span>
+                            </div>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 p-2 text-start" style="min-width: 290px; border-radius: 12px; z-index: 1050;">
+                                <li><h6 class="dropdown-header text-dark fw-bold border-bottom pb-2 mb-2"><i class="bi bi-bell ms-1 text-primary"></i> الإشعارات الأخيرة</h6></li>
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 mb-1" href="salaries.html">
+                                        <div class="fw-bold small text-dark">تحديث الرواتب لشهر الحالي</div>
+                                        <small class="text-muted">تم اعتماد المسير المالي بنجاح.</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 mb-1" href="employees.html">
+                                        <div class="fw-bold small text-dark">موظف جديد (أحمد علي)</div>
+                                        <small class="text-muted">يحتاج لتأكيد المسمى الوظيفي.</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2" href="attendance.html">
+                                        <div class="fw-bold small text-dark">تنبيـه حضور وانصراف</div>
+                                        <small class="text-muted">تم تسجيل غياب 1 موظف تلقائياً اليوم.</small>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="dropdown">
+                            <div id="navAdminInitials" class="bg-light text-primary rounded-circle d-flex align-items-center justify-content-center border shadow-sm fw-bold dropdown-toggle no-arrow" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; cursor: pointer;">
+                                مو
+                            </div>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 p-2 text-start" style="min-width: 200px; border-radius: 12px; z-index: 1050;">
+                                <li>
+                                    <div class="px-3 py-2">
+                                        <p class="mb-0 small text-muted">مرحباً بك</p>
+                                        <h6 class="mb-0 fw-bold text-dark" id="dropdownAdminName">محمد المتولي</h6>
+                                    </div>
+                                </li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li><a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2" href="settings.html"><i class="bi bi-person-gear text-secondary fs-5"></i><span>إعدادات الحساب</span></a></li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li><a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2 text-danger" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right fs-5"></i><span>تسجيل الخروج</span></a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                <div class="mb-4" id="welcomeAdminMessage">
+                    <h3 class="fw-bold text-dark mb-0">أهلاً بك مجدداً، محمد المتولي 👋</h3>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm p-3 bg-white text-dark h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="bg-primary bg-opacity-10 p-3 rounded text-primary"><i class="bi bi-people fs-3"></i></div>
+                                <div class="text-end">
+                                    <h6 class="text-muted mb-1 small">إجمالي الموظفين</h6>
+                                    <h3 class="fw-bold mb-0" id="totalEmployeesCount">4</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm p-3 bg-white text-dark h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="bg-success bg-opacity-10 p-3 rounded text-success"><i class="bi bi-calendar-check fs-3"></i></div>
+                                <div class="text-end">
+                                    <h6 class="text-muted mb-1 small">حضور اليوم</h6>
+                                    <h3 class="fw-bold mb-0 text-success" id="todayAttendanceCount">3</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm p-3 bg-white text-dark h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="bg-danger bg-opacity-10 p-3 rounded text-danger"><i class="bi bi-person-x fs-3"></i></div>
+                                <div class="text-end">
+                                    <h6 class="text-muted mb-1 small">الغياب / الإجازات</h6>
+                                    <h3 class="fw-bold mb-0 text-danger">1</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm p-3 bg-white text-dark h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="bg-warning bg-opacity-10 p-3 rounded text-warning"><i class="bi bi-cash-stack fs-3"></i></div>
+                                <div class="text-end">
+                                    <h6 class="text-muted mb-1 small">مسير الرواتب المعتمد</h6>
+                                    <h3 class="fw-bold mb-0 text-warning"><span id="dashboardSalaryApproved">31,500</span> <span class="currency-label">ج.م</span></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm p-4 h-100">
+                            <h5 class="fw-bold text-dark mb-3" style="font-size: 1.05rem;"><i class="bi bi-pie-chart me-2 text-primary"></i>الأقسام الحالية</h5>
+                            <div class="p-3 bg-light rounded-3 mb-2 d-flex justify-content-between align-items-center">
+                                <span class="fw-semibold small"><i class="bi bi-laptop ms-2 text-primary"></i>تكنولوجيا المعلومات (IT)</span>
+                                <span class="badge bg-primary rounded-pill px-3" id="deptItBadge">2 موظفين</span>
+                            </div>
+                            <div class="p-3 bg-light rounded-3 mb-2 d-flex justify-content-between align-items-center">
+                                <span class="fw-semibold small"><i class="bi bi-person-gear ms-2 text-success"></i>الموارد البشرية (HR)</span>
+                                <span class="badge bg-success rounded-pill px-3" id="deptHrBadge">1 موظف</span>
+                            </div>
+                            <div class="p-3 bg-light rounded-3 mb-2 d-flex justify-content-between align-items-center">
+                                <span class="fw-semibold small"><i class="bi bi-wallet2 ms-2 text-warning"></i>الحسابات والمبيعات</span>
+                                <span class="badge bg-warning text-dark rounded-pill px-3" id="deptSalesBadge">1 موظف</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm p-4 h-100">
+                            <h5 class="fw-bold text-dark mb-3" style="font-size: 1.05rem;"><i class="bi bi-bar-chart-line me-2 text-success"></i>إحصائية الحضور الأسبوعية</h5>
+                            <div class="position-relative w-100 mt-2" style="height: 180px;">
+                                <canvas id="hrAnalyticsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold text-dark mb-0" style="font-size: 1.05rem;"><i class="bi bi-activity me-2 text-danger"></i>حالة الأنشطة الآن</h5>
+                                <div class="d-flex align-items-center gap-1">
+                                    <span class="pulse-indicator"></span>
+                                    <small class="text-success fw-bold" style="font-size: 0.75rem;">مباشر</small>
+                                </div>
+                            </div>
+                            <ul class="list-group list-group-flush pr-0" id="liveActivitiesList">
+                                <li class="list-group-item d-flex justify-content-between align-items-start px-0 bg-transparent pt-2 pb-2">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold small">تحديث الرواتب لشهر الحالي</div>
+                                        <span class="text-muted extra-small" style="font-size: 0.8rem;">تم اعتماد المسير المالي بنجاح.</span>
+                                    </div>
+                                    <span class="badge bg-secondary rounded-pill" style="font-size: 0.7rem;">منذ ساعة</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-start px-0 bg-transparent pt-2 pb-0">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold small">إضافة موظف جديد</div>
+                                        <span class="text-muted" style="font-size: 0.8rem;">تم مزامنة سجلات الموظفين بنجاح.</span>
+                                    </div>
+                                    <span class="badge bg-secondary rounded-pill" style="font-size: 0.7rem;">أمس</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 14px;">
+                <div class="modal-header bg-light border-0 py-3">
+                    <h5 class="modal-title fw-bold text-dark fs-6" id="addEmployeeModalLabel"><i class="bi bi-person-plus ms-2 text-primary"></i>تسجيل موظف جديد سريع</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="quickAddEmployeeForm">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">اسم الموظف بالكامل</label>
+                            <input type="text" id="empNameInput" class="form-control p-2.5 rounded-2" placeholder="مثال: أحمد علي كريم" style="font-size: 0.9rem;" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">القسم المخصص</label>
+                            <select id="empDeptInput" class="form-select p-2.5 rounded-2" style="font-size: 0.9rem;">
+                                <option value="IT">تكنولوجيا المعلومات (IT)</option>
+                                <option value="HR">الموارد البشرية (HR)</option>
+                                <option value="SALES">الحسابات والمبيعات</option>
+                            </select>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label small fw-bold text-secondary">الراتب الأساسي</label>
+                            <input type="number" id="empSalaryInput" class="form-control p-2.5 rounded-2" placeholder="مثال: 7000" style="font-size: 0.9rem;" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light border-0 py-2">
+                    <button type="button" class="btn btn-secondary btn-sm rounded-2 px-3" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" form="quickAddEmployeeForm" class="btn btn-primary btn-sm rounded-2 px-4">حفظ وتأكيد</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // 🔒 [إضافة ميزة الحماية] التحقق من تسجيل الدخول أولاً قبل تحميل أي شيء في الصفحة
+            if (sessionStorage.getItem("isLoggedIn") !== "true") {
+                window.location.href = "login.html";
+                return; // إيقاف تنفيذ باقي الكود تماماً لمنع المتطفلين
+            }
+
+            // متغير مرجعي للرسم البياني لكي نتمكن من تحديثه لاحقاً
+            let hrChart;
+
+            const globalSettings = JSON.parse(localStorage.getItem("hr_dashboard_settings")) || {
+                adminName: "محمد المتولي",
+                companyName: "شركة المتولي للبرمجيات",
+                currency: "ج.م"
+            };
+
+            if (document.getElementById("sidebarCompanyName") && globalSettings.companyName) {
+                document.getElementById("sidebarCompanyName").innerHTML = `<i class="bi bi-person-workspace me-2"></i>${globalSettings.companyName}`;
+            }
+
+            // ترحيب ذكي بالاعتماد على التوقيت الحالي لجهاز المسؤول مع طباعة التاريخ واليوم بالعربي بالكامل
+            if (document.getElementById("welcomeAdminMessage") && globalSettings.adminName) {
+                const hours = new Date().getHours();
+                const todayFormatted = new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                let timeGreeting = "";
+
+                if (hours < 12) {
+                    timeGreeting = `صباح الخير، ${globalSettings.adminName} ☀️`;
+                } else {
+                    timeGreeting = `مساء الخير، ${globalSettings.adminName} 🌙`;
+                }
+
+                document.getElementById("welcomeAdminMessage").innerHTML = `
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center w-100 bg-white p-3 rounded-3 shadow-sm border-start border-primary border-4">
+                        <h4 class="fw-bold text-dark mb-0 mb-md-0">${timeGreeting}</h4>
+                        <span class="text-muted small fw-medium mt-2 mt-md-0 d-inline-flex align-items-center gap-2" style="font-size:0.85rem;">
+                            <i class="bi bi-calendar3 text-primary"></i> ${todayFormatted}
+                        </span>
+                    </div>
+                `;
+            }
+
+            if (document.getElementById("dropdownAdminName") && globalSettings.adminName) {
+                document.getElementById("dropdownAdminName").textContent = globalSettings.adminName;
+            }
+            
+            // حل أزمة الحروف الإشهارية: أخذ أول حرفين من الاسم الأول مباشرة لتثبيتها "مو"
+            if (document.getElementById("navAdminInitials") && globalSettings.adminName) {
+                const firstName = globalSettings.adminName.trim().split(" ")[0];
+                const initials = firstName.substring(0, 2); 
+                document.getElementById("navAdminInitials").textContent = initials;
+            }
+
+            document.querySelectorAll(".currency-label").forEach(el => {
+                el.textContent = globalSettings.currency || "ج.م";
+            });
+
+            // بناء وتشغيل كود الرسم البياني التفاعلي من خلال مكتبة Chart.js المتناسقة مع ألوان لوحة التحكم
+            const ctx = document.getElementById('hrAnalyticsChart').getContext('2d');
+            hrChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس'],
+                    datasets: [{
+                        label: 'الموظفين الحاضرين',
+                        data: [4, 3, 4, 3, 4],
+                        backgroundColor: '#0d6efd',
+                        borderRadius: 4,
+                        barThickness: 16
+                    }, {
+                        label: 'الموظفين الغائبين',
+                        data: [0, 1, 0, 1, 0],
+                        backgroundColor: '#dc3545',
+                        borderRadius: 4,
+                        barThickness: 16
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { font: { family: 'Cairo', size: 11 } }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: 'Cairo', size: 11 } } },
+                        y: { beginAtZero: true, max: 8, ticks: { stepSize: 1, font: { family: 'Cairo', size: 11 } } }
+                    }
+                }
+            });
+
+            // ==========================================
+            // المعالجة الديناميكية لإضافة موظف سريع حياً
+            // ==========================================
+            const quickAddForm = document.getElementById("quickAddEmployeeForm");
+            if (quickAddForm) {
+                quickAddForm.addEventListener("submit", (e) => {
+                    e.preventDefault(); // منع السلوك الافتراضي للمتصفح بإعادة تحميل الصفحة
+
+                    // 1. جلب البيانات من حقول الإدخال
+                    const empName = document.getElementById("empNameInput").value.trim();
+                    const empDept = document.getElementById("empDeptInput").value;
+                    const empSalary = parseFloat(document.getElementById("empSalaryInput").value) || 0;
+
+                    // 2. تحديث كارت "إجمالي الموظفين" و "حضور اليوم"
+                    const totalEmpEl = document.getElementById("totalEmployeesCount");
+                    const todayAttEl = document.getElementById("todayAttendanceCount");
+                    
+                    let currentTotal = parseInt(totalEmpEl.textContent) || 0;
+                    let currentAtt = parseInt(todayAttEl.textContent) || 0;
+                    
+                    totalEmpEl.textContent = currentTotal + 1;
+                    todayAttEl.textContent = currentAtt + 1; // افتراض حضور الموظف اليوم تلقائياً
+
+                    // 3. تحديث كارت "مسير الرواتب المعتمد" وحساب القيمة الجديدة مع التنسيق الرقمي
+                    const salaryApprovedEl = document.getElementById("dashboardSalaryApproved");
+                    let currentTotalSalary = parseFloat(salaryApprovedEl.textContent.replace(/,/g, '')) || 0;
+                    let newTotalSalary = currentTotalSalary + empSalary;
+                    salaryApprovedEl.textContent = newTotalSalary.toLocaleString('en-US'); // لإعادة الفواصل مثل 38,500
+
+                    // 4. تحديث أعداد الموظفين بالأقسام الحالية ديناميكياً
+                    if (empDept === "IT") {
+                        const deptItBadge = document.getElementById("deptItBadge");
+                        let count = parseInt(deptItBadge.textContent) || 0;
+                        deptItBadge.textContent = `${count + 1} موظفين`;
+                    } else if (empDept === "HR") {
+                        const deptHrBadge = document.getElementById("deptHrBadge");
+                        let count = parseInt(deptHrBadge.textContent) || 0;
+                        deptHrBadge.textContent = `${count + 1} موظف`;
+                    } else if (empDept === "SALES") {
+                        const deptSalesBadge = document.getElementById("deptSalesBadge");
+                        let count = parseInt(deptSalesBadge.textContent) || 0;
+                        deptSalesBadge.textContent = `${count + 1} موظف`;
+                    }
+
+                    // 5. تحديث الرسم البياني فورا (إضافة الموظف الجديد في حضور يوم الخميس الأخير كمثال)
+                    hrChart.data.datasets[0].data[4] += 1; 
+                    hrChart.update();
+
+                    // 6. إضافة عنصر جديد لقائمة الأنشطة الفورية في الأعلى
+                    const liveActivitiesList = document.getElementById("liveActivitiesList");
+                    const newActivityLi = document.createElement("li");
+                    newActivityLi.className = "list-group-item d-flex justify-content-between align-items-start px-0 bg-transparent pt-2 pb-2 border-bottom";
+                    
+                    // تحويل كود القسم لاسم مقروء في النشاط
+                    let deptText = "تكنولوجيا المعلومات";
+                    if(empDept === "HR") deptText = "الموارد البشرية";
+                    if(empDept === "SALES") deptText = "الحسابات والمبيعات";
+
+                    newActivityLi.innerHTML = `
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold small text-primary">إضافة موظف سريع جديد سليم</div>
+                            <span class="text-muted extra-small" style="font-size: 0.8rem;">تم تسجيل الموظف (${empName}) في قسم ${deptText}.</span>
+                        </div>
+                        <span class="badge bg-success rounded-pill" style="font-size: 0.7rem;">الآن</span>
+                    `;
+                    // إدراج النشاط في أول القائمة
+                    liveActivitiesList.insertBefore(newActivityLi, liveActivitiesList.firstChild);
+
+                    // 7. إغلاق الـ Modal الخاص بـ Bootstrap برمجياً ومسح الحقول
+                    const modalElement = document.getElementById('addEmployeeModal');
+                    const bootstrapModal = bootstrap.Modal.getInstance(modalElement);
+                    if (bootstrapModal) {
+                        bootstrapModal.hide();
+                    }
+                    quickAddForm.reset(); // تفريغ حقول الفورم لتكون جاهزة للمرة القادمة
+                });
+            }
+
+            // ==========================================
+            // [تعديل] كود معالجة زر تسجيل الخروج الفعلي
+            // ==========================================
+            const logoutBtn = document.getElementById("logoutBtn");
+            if (logoutBtn) {
+                logoutBtn.addEventListener("click", (e) => {
+                    e.preventDefault(); // منع السلوك الافتراضي للرابط (#)
+                    
+                    // 🔑 مسح حالة تسجيل الدخول من الذاكرة المؤقتة لمنع الرجوع للخلف بالمتصفح
+                    sessionStorage.removeItem("isLoggedIn");
+
+                    // التوجيه فوراً لصفحة تسجيل الدخول
+                    window.location.href = "login.html"; 
+                });
+            }
+        });
+    </script>
+</body>
+</html>
